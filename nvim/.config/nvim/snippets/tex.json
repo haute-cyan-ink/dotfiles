@@ -1,0 +1,44 @@
+{
+  "my_lualatex_template": {
+    "prefix": "my_lualatex_template",
+    "body": [
+      "\\documentclass[${1:a4paper, 11pt}]{${2:ltjsarticle}}",
+      "\\usepackage{amsmath}",
+      "\\usepackage{amssymb}",
+      "\\usepackage{graphicx}",
+      "\\usepackage{enumitem}",
+      "\\usepackage[nobreak]{cite}",
+      "\\usepackage{listings}",
+      "\\usepackage{luatexja-preset} % LuaLaTeXで日本語を扱うためのパッケージを追加",
+      "\\usepackage{subcaption}",
+      "${3}",
+      "",
+      "\\begin{document}",
+      "",
+      "\\title{${4}}",
+      "\\author{${5}}",
+      "\\date{${6:\\today}}",
+      "\\maketitle",
+      "",
+      "\\section{はじめに}",
+      "$0",
+      "",
+      "\\end{document}",
+      ""
+    ],
+    "description": "LuaLaTeX用パッケージ"
+  },
+  "my_lstset_template_lualatex": {
+    "prefix": "my_lstset_template_lualatex",
+    "body": [
+      "\\lstset{",
+      "language=${4},",
+      "numbers=left,",
+      "breaklines=true,",
+      "basicstyle=\\ttfamily\\footnotesize,",
+      "frame=single,",
+      "extendedchars=\\true",
+      "}"
+    ]
+  }
+}
