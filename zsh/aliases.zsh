@@ -20,7 +20,7 @@ function google() {
 }
 
 # lazygit
-abbr lg='lazygit'
+abbr -S -qq lg='lazygit'
 
 # pnpm
 abbr pd='pnpm dev'
