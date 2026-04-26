@@ -6,6 +6,7 @@ export PATH=$PATH:/opt/homebrew/bin
 export PATH=/usr/local/bin:$PATH
 export ABBR_QUIET=1
 export EDITOR="nvim"
+export XDG_CONFIG_HOME=${HOME}/.config
 #################################  HISTORY  #################################
 # history
 HISTFILE=$HOME/.zsh_history     # 履歴を保存するファイル
@@ -162,3 +163,17 @@ export PATH="$HOME/.cargo/bin:$PATH"
 if [[ -z "$NVIM" ]]; then
   (cd ~/login_bonus_for_shell && python logger.py)
 fi
+
+# ghq
+function ghq-fzf() {
+  local src=$(ghq list | fzf --preview "bat --color=always --style=header,grid --line-range :80 $(ghq root)/{}/README.*")
+  if [ -n "$src" ]; then
+    BUFFER="cd $(ghq root)/$src"
+    zle accept-line
+  fi
+  zle -R -c
+}
+zle -N ghq-fzf
+bindkey '^g' ghq-fzf
+export PATH="/Users/tutaya/.config/herd-lite/bin:$PATH"
+export PHP_INI_SCAN_DIR="/Users/tutaya/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
