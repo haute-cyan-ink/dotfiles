@@ -5,14 +5,36 @@ return {
 		{ "nvim-treesitter/nvim-treesitter", branch = "main" },
 	},
 	config = function()
-		require("nvim-treesitter").setup({
-			ensure_installed = { "python", "typescript", "markdown", "markdown_inline" },
-		})
+		local ts = require("nvim-treesitter")
 
-		vim.api.nvim_create_autocmd("FileType", {
+		-- 1. パーサーのインストール
+		-- Neovim自体の設定や基礎的な言語を追加
+		local parsers = {
+			"lua",
+			"vim",
+			"vimdoc",
+			"query",
+			"python",
+			"typescript",
+			"javascript",
+			"markdown",
+			"markdown_inline",
+		}
+		for _, p in ipairs(parsers) do
+			-- すでにインストールされている場合はスキップ、なければインストール
+			pcall(ts.install, p)
+		end
+
+		-- 2. ハイライトの有効化
+		vim.api.nvim_create_autocmd({ "FileType", "BufEnter" }, {
 			callback = function(args)
-				local lang = vim.treesitter.language.get_lang(vim.bo[args.buf].filetype)
-				if lang and pcall(require("nvim-treesitter.parsers").get_parser, args.buf, lang) then
+				local ft = vim.bo[args.buf].filetype
+				if ft == "" then
+					return
+				end
+				local lang = vim.treesitter.language.get_lang(ft) or ft
+				-- パーサーが利用可能か確認して開始
+				if pcall(require("nvim-treesitter.parsers").get_parser, args.buf, lang) then
 					vim.treesitter.start(args.buf, lang)
 				end
 			end,
@@ -28,8 +50,6 @@ return {
 			"RainbowCyan",
 		}
 		local hooks = require("ibl.hooks")
-		-- create the highlight groups in the highlight setup hook, so they are reset
-		-- every time the colorscheme changes
 		hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
 			vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
 			vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
